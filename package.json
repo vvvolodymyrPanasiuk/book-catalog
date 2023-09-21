@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@babel/plugin-transform-async-generator-functions": "^7.22.15",
+    "@babel/plugin-transform-unicode-property-regex": "^7.22.5",
+    "ts-evaluator": "^1.2.0"
+  }
+}

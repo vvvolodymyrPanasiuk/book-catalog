@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.83-alpha">
+  <PropertyGroup>
+    <StartupCommand>npm start</StartupCommand>
+    <JavaScriptTestFramework>Jasmine</JavaScriptTestFramework>
+    <!-- Command to run on project build -->
+    <BuildCommand>
+    </BuildCommand>
+    <!-- Command to create an optimized build of the project that's ready for publishing -->
+    <ProductionBuildCommand>npm run build</ProductionBuildCommand>
+    <!-- Folder where production build objects will be placed -->
+    <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\BookCatalogWebUI</BuildOutputFolder>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="src\app\core\models\" />
+    <Folder Include="src\app\core\services\" />
+    <Folder Include="src\app\modules\home\" />
+    <Folder Include="src\app\shared\header\" />
+    <Folder Include="src\app\shared\footer\" />
+  </ItemGroup>
+</Project>

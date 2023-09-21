@@ -48,6 +48,17 @@ namespace BookCatalog.WebAPI
                      .CreateLogger());
             });
 
+            // Add CORS policy
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             // Register the Swagger services
             services.AddVersionedApiExplorer(options =>
                 options.GroupNameFormat = "'v'VVV");
@@ -88,6 +99,8 @@ namespace BookCatalog.WebAPI
             }
 
             app.UseErrorHandlingMiddleware();
+
+            app.UseCors();
 
             // Register the Swagger generator and the Swagger UI middlewares
             app.UseSwagger();
