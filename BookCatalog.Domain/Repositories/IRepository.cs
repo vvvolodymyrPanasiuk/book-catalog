@@ -29,15 +29,13 @@
         /// Adds a new entity to the repository.
         /// </summary>
         /// <param name="entity">The entity to add.</param>
-        /// <returns>The added entity with its assigned ID.</returns>
-        Task<TEntity> AddAsync(TEntity entity);
+        Task AddAsync(TEntity entity);
 
         /// <summary>
         /// Updates an existing entity in the repository.
         /// </summary>
         /// <param name="entity">The updated entity data.</param>
-        /// <returns>The updated entity data.</returns>
-        Task<TEntity> UpdateAsync(TEntity entity);
+        Task UpdateAsync(TEntity entity);
 
         /// <summary>
         /// Deletes an entity from the repository by its unique identifier.
