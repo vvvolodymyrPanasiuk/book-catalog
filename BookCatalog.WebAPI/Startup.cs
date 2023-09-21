@@ -3,6 +3,7 @@ using BookCatalog.DAL.EF.Repositories;
 using BookCatalog.DAL.EF.Repositories.BookRepository;
 using BookCatalog.Domain.Repositories;
 using BookCatalog.Domain.Repositories.BookRepository;
+using BookCatalog.WebAPI.Models.BookModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ namespace BookCatalog.WebAPI
             services.AddDbContext<BookCatalogDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddAutoMapper(typeof(BookMappingProfile));
             services.AddControllers();
 
 
