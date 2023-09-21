@@ -3,7 +3,9 @@ using BookCatalog.Domain.Entities.BookAggregate;
 using BookCatalog.Domain.Repositories.BookRepository;
 using BookCatalog.WebAPI.Models.BookModels.Request;
 using BookCatalog.WebAPI.Models.BookModels.Response;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,13 +18,16 @@ namespace BookCatalog.WebAPI.Controllers
     {
         private readonly IBookRepository _bookRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<BooksController> _logger;
 
         public BooksController(
             IBookRepository bookRepository,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<BooksController> logger)
         {
             _bookRepository = bookRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -31,29 +36,45 @@ namespace BookCatalog.WebAPI.Controllers
         [HttpGet("books")]
         public async Task<IActionResult> GetAllBooks()
         {
-            var books = await _bookRepository.GetAllAsync();
-            if (books == null)
+            try
             {
-                return NotFound();
+                var books = await _bookRepository.GetAllAsync();
+                if (books == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound);
+                }
+
+                var bookResponses = _mapper.Map<IEnumerable<BookResponse>>(books);
+
+                return StatusCode(StatusCodes.Status200OK, bookResponses);
             }
-
-            var bookResponses = _mapper.Map<IEnumerable<BookResponse>>(books);
-
-            return Ok(bookResponses);
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+            }
         }
 
         [HttpGet("books/{id}")]
         public async Task<IActionResult> GetBookById(Guid id)
         {
-            var book = await _bookRepository.GetByIdAsync(id);
-            if (book == null)
+            try
             {
-                return NotFound();
+                var book = await _bookRepository.GetByIdAsync(id);
+                if (book == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound);
+                }
+
+                var bookResponse = _mapper.Map<BookResponse>(book);
+
+                return StatusCode(StatusCodes.Status200OK, bookResponse);
             }
-
-            var bookResponse = _mapper.Map<BookResponse>(book);
-
-            return Ok(bookResponse);
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+            }   
         }
 
         #endregion
@@ -64,15 +85,22 @@ namespace BookCatalog.WebAPI.Controllers
         [HttpPost("book")]
         public async Task<IActionResult> AddBook([FromBody] BookRequest bookRequest)
         {
-            if (bookRequest == null)
+            if (ModelState.IsValid)
             {
-                return BadRequest();
+                try
+                {
+                    var book = _mapper.Map<Book>(bookRequest);
+
+                    await _bookRepository.AddAsync(book);
+                    return StatusCode(StatusCodes.Status201Created);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error: {ex.Message}");
+                    return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+                }
             }
-
-            var book = _mapper.Map<Book>(bookRequest);
-
-            await _bookRepository.AddAsync(book);
-            return Ok();
+            return StatusCode(StatusCodes.Status400BadRequest, ModelState);
         }
 
         #endregion
@@ -83,21 +111,29 @@ namespace BookCatalog.WebAPI.Controllers
         [HttpPut("books/{id}")]
         public async Task<IActionResult> UpdateBook(Guid id, [FromBody] BookRequest bookRequest)
         {
-            if (bookRequest == null || id == Guid.Empty)
+
+            if (ModelState.IsValid)
             {
-                return BadRequest();
+                try
+                {
+                    var existingBook = await _bookRepository.GetByIdAsync(id);
+                    if (existingBook == null)
+                    {
+                        return StatusCode(StatusCodes.Status404NotFound);
+                    }
+
+                    _mapper.Map(bookRequest, existingBook);
+
+                    await _bookRepository.UpdateAsync(existingBook);
+                    return StatusCode(StatusCodes.Status201Created);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error: {ex.Message}");
+                    return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+                }
             }
-
-            var existingBook = await _bookRepository.GetByIdAsync(id);
-            if (existingBook == null)
-            {
-                return NotFound();
-            }
-
-            _mapper.Map(bookRequest, existingBook);
-
-            await _bookRepository.UpdateAsync(existingBook);
-            return Ok();
+            return StatusCode(StatusCodes.Status400BadRequest, ModelState);
         }
 
         #endregion
@@ -108,14 +144,22 @@ namespace BookCatalog.WebAPI.Controllers
         [HttpDelete("books/{id}")]
         public async Task<IActionResult> DeleteBook(Guid id)
         {
-            var book = await _bookRepository.GetByIdAsync(id);
-            if (book == null)
+            try
             {
-                return NotFound();
-            }
+                var book = await _bookRepository.GetByIdAsync(id);
+                if (book == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound);
+                }
 
-            await _bookRepository.DeleteAsync(id);
-            return NoContent();
+                await _bookRepository.DeleteAsync(id);
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+            }
         }
 
         #endregion

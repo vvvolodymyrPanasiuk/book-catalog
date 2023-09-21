@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System.Linq;
 
 namespace BookCatalog.WebAPI
@@ -27,6 +29,17 @@ namespace BookCatalog.WebAPI
         {
             services.AddDbContext<BookCatalogDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            // Add logging with Serilog
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.AddSerilog(new LoggerConfiguration()
+                     .MinimumLevel.Debug()
+                     .WriteTo.Console()
+                     .WriteTo.File("./logs/log.txt", rollingInterval: RollingInterval.Day)
+                     .CreateLogger());
+            });
 
             services.AddAutoMapper(typeof(BookMappingProfile));
             services.AddControllers();
