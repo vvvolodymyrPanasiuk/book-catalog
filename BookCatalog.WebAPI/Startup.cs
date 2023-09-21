@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using BookCatalog.WebAPI.Middleware;
 
 namespace BookCatalog.WebAPI
 {
@@ -85,6 +86,8 @@ namespace BookCatalog.WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseErrorHandlingMiddleware();
 
             // Register the Swagger generator and the Swagger UI middlewares
             app.UseSwagger();
