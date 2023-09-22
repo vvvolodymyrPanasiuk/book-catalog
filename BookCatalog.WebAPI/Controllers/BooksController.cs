@@ -37,7 +37,6 @@ namespace BookCatalog.WebAPI.Controllers
         /// </summary>
         /// <returns>Returns status 200 (OK) with a list of books or an error message.</returns>
         /// <response code="200">Returns status 200 (OK) with a list of books.</response>
-        /// <response code="401">If the user is not authorized to perform this action.</response>
         /// <response code="404">If no books were found.</response>
         /// <response code="500">If an error occurred during the operation.</response>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BookResponse>))]
@@ -64,7 +63,6 @@ namespace BookCatalog.WebAPI.Controllers
         /// <param name="id">The unique identifier of the book.</param>
         /// <returns>Returns status 200 (OK) with the book details or an error message.</returns>
         /// <response code="200">Returns status 200 (OK) with the book details.</response>
-        /// <response code="401">If the user is not authorized to perform this action.</response>
         /// <response code="404">If the book with the specified ID was not found.</response>
         /// <response code="500">If an error occurred during the operation.</response>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookResponse))]
@@ -97,7 +95,6 @@ namespace BookCatalog.WebAPI.Controllers
         /// <returns>Returns status 201 (Created) if the book was added successfully or an error message.</returns>
         /// <response code="201">Returns status 201 (Created) if the book was added successfully.</response>
         /// <response code="400">If the request model is invalid.</response>
-        /// <response code="401">If the user is not authorized to perform this action.</response>
         /// <response code="500">If an error occurred during the operation.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
@@ -129,7 +126,6 @@ namespace BookCatalog.WebAPI.Controllers
         /// <returns>Returns status 200 (OK) if the book was updated successfully or an error message.</returns>
         /// <response code="200">Returns status 200 (OK) if the book was updated successfully.</response>
         /// <response code="400">If the request model is invalid.</response>
-        /// <response code="401">If the user is not authorized to perform this action.</response>
         /// <response code="404">If the book with the specified ID was not found.</response>
         /// <response code="500">If an error occurred during the operation.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -168,7 +164,6 @@ namespace BookCatalog.WebAPI.Controllers
         /// <param name="id">The unique identifier of the book to delete.</param>
         /// <returns>Returns status 204 (No Content) if the book was deleted successfully or an error message.</returns>
         /// <response code="204">Returns status 204 (No Content) if the book was deleted successfully.</response>
-        /// <response code="401">If the user is not authorized to perform this action.</response>
         /// <response code="404">If the book with the specified ID was not found.</response>
         /// <response code="500">If an error occurred during the operation.</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]

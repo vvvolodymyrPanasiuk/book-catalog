@@ -18,7 +18,7 @@ namespace BookCatalog.DAL.EF.Repositories.BookRepository
             }
 
             return await _dbSet
-                .Where(book => book.Title.Contains(title, StringComparison.OrdinalIgnoreCase))
+                .Where(book => book.Title.Contains(title))
                 .ToListAsync();
         }
     }
