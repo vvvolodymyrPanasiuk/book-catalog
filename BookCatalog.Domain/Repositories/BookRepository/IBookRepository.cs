@@ -7,5 +7,6 @@ namespace BookCatalog.Domain.Repositories.BookRepository
     /// </summary>
     public interface IBookRepository : IRepository<Book>
     {
+        Task<IEnumerable<Book>> SearchBooksByTitleAsync(string title);
     }
 }
