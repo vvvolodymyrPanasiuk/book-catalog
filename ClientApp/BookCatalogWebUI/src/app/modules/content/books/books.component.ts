@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 
+import { Book } from 'src/app/core/models/book';
+
 @Component({
   selector: 'app-books',
   templateUrl: './books.component.html',
@@ -17,12 +19,3 @@ export class BooksComponent {
     }, error => console.error(error));
   }
 }
-
-interface Book {
-  id: string;
-  title: string;
-  publicationDate: string;
-  description: string;
-  pageCount: number;
-}
-
