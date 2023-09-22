@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { BooksComponent } from './books/books.component';
 import { ContentRoutingModule } from './content-routing.module';
@@ -13,7 +14,8 @@ import { ContentRoutingModule } from './content-routing.module';
   imports: [
     CommonModule,
     ContentRoutingModule,
-    RouterModule
+    RouterModule,
+    FormsModule
   ],
   providers: [],
   exports: [
