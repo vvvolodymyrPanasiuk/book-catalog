@@ -1,0 +1,26 @@
+<h1 id="tableLabel">Book Catalog</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<p *ngIf="!books"><em>Loading... Please wait while the data is being fetched.</em></p>
+
+<table *ngIf="books">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Publication Date</th>
+      <th>Description</th>
+      <th>Page Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let book of books">
+      <td>{{ book.id }}</td>
+      <td>{{ book.title }}</td>
+      <td>{{ book.publicationDate }}</td>
+      <td>{{ book.description }}</td>
+      <td>{{ book.pageCount }}</td>
+    </tr>
+  </tbody>
+</table>
