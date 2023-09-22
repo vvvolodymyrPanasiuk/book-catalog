@@ -6,9 +6,8 @@ namespace BookCatalog.DAL.EF.Repositories.BookRepository
 {
     public class BookRepository : Repository<Book>, IBookRepository
     {
-        public BookRepository(BookCatalogDbContext context) : base(context)
-        {
-        }
+        public BookRepository(BookCatalogDbContext context) : base(context) {}
+
 
         public async Task<IEnumerable<Book>> SearchBooksByTitleAsync(string title)
         {
@@ -42,6 +41,31 @@ namespace BookCatalog.DAL.EF.Repositories.BookRepository
             }
 
             return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Book>> FilterBooksByCustomDatePublicationAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _dbSet
+                .Where(book => book.PublicationDate >= startDate && book.PublicationDate <= endDate)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Book>> FilterBooksByThisMonthPublicationAsync()
+        {
+            DateTime currentDate = DateTime.Now;
+            DateTime firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            return await FilterBooksByCustomDatePublicationAsync(firstDayOfMonth, lastDayOfMonth);
+        }
+
+        public async Task<IEnumerable<Book>> FilterBooksByThisYearPublicationAsync()
+        {
+            DateTime currentDate = DateTime.Now;
+            DateTime firstDayOfYear = new DateTime(currentDate.Year, 1, 1);
+            DateTime lastDayOfYear = new DateTime(currentDate.Year, 12, 31);
+
+            return await FilterBooksByCustomDatePublicationAsync(firstDayOfYear, lastDayOfYear);
         }
     }
 }
