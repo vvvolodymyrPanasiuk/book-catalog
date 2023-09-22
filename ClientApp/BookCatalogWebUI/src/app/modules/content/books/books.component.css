@@ -1,0 +1,13 @@
+.search-book {
+  color: #333;
+  font-size: 1rem;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  border-radius: 0.2rem;
+  background-color: rgb(247, 241, 235);
+  border: none;
+  width: 90%;
+  display: block;
+  border-bottom: 0.3rem solid transparent;
+  transition: all 0.3s;
+}
