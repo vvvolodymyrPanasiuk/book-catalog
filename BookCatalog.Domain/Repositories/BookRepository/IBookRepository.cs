@@ -21,5 +21,25 @@ namespace BookCatalog.Domain.Repositories.BookRepository
         /// <param name="ascending">The ascending sorting.</param>
         /// <returns>A list of sorted book`s entities.</returns>
         Task<IEnumerable<Book>> SortBooksAsync(string sorterFilterBy, bool ascending);
+
+        /// <summary>
+        /// Gets filtered books by сustom date.
+        /// </summary>
+        /// <param name="startDate">The start data of publication.</param>
+        /// <param name="endDate">The end data of publication.</param>
+        /// <returns>A list of filtered book`s entities.</returns>
+        Task<IEnumerable<Book>> FilterBooksByCustomDatePublicationAsync(DateTime startDate, DateTime endDate);
+
+        /// <summary>
+        /// Gets filtered books by this month.
+        /// </summary>
+        /// <returns>A list of filtered book`s entities.</returns>
+        Task<IEnumerable<Book>> FilterBooksByThisMonthPublicationAsync();
+
+        /// <summary>
+        /// Gets filtered books by this year.
+        /// </summary>
+        /// <returns>A list of filtered book`s entities.</returns>
+        Task<IEnumerable<Book>> FilterBooksByThisYearPublicationAsync();
     }
 }
