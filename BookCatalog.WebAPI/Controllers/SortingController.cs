@@ -42,7 +42,7 @@ namespace BookCatalog.WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> SortBooks([FromQuery] string field, [FromQuery] bool ascending = true)
         {
-            if(field != "title" || field != "publicationdate" || field != "pagecount")
+            if (field != "title" && field != "publicationdate" && field != "pagecount")
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }

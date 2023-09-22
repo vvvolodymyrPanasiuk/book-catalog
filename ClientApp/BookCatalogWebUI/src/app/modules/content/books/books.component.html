@@ -5,6 +5,21 @@
 
 <input class="search-book" type="text" placeholder="Search.." (input)="search($event)">
 
+<br>
+
+<div class="custom-select">
+  <label>Sort by: </label>
+  <select [(ngModel)]="selectedSortOption" (change)="sort()">
+    <option value="1">Title (asc)</option>
+    <option value="2">Title (desc)</option>
+    <option value="3">Publication Date (asc)</option>
+    <option value="4">Publication Date (desc)</option>
+    <option value="5">Page Count (asc)</option>
+    <option value="6">Page Count (desc)</option>
+    <option value="7">None</option>
+  </select>
+</div>
+
 
 <p *ngIf="!books"><em>Loading... Please wait while the data is being fetched.</em></p>
 
