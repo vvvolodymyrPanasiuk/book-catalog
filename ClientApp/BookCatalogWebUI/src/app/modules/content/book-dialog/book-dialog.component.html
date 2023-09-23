@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>{{dialogTitle}}</h2>
+
+<form [formGroup]="bookForm">
+  <mat-form-field *ngIf="bookForm.get('id')?.value !== null">
+    <input matInput formControlName="id" placeholder="ID книги" readonly>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="title" placeholder="Назва книги" required>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Дата публікації</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="publicationDate">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="description" placeholder="Опис" required>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="pageCount" placeholder="Кількість сторінок" required>
+  </mat-form-field>
+
+  <div class="buttons">
+    <button mat-button (click)="saveBook()" [disabled]="bookForm.invalid">Зберегти</button>
+    <button mat-button (click)="cancel()">Скасувати</button>
+  </div>
+</form>

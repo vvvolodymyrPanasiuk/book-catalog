@@ -49,6 +49,14 @@
     </mat-form-field>
 
   </div>
+
+  <div class="custom-select">
+    <label>Add new book:</label>
+    <button mat-icon-button (click)="createBook()">
+      <mat-icon>add_box</mat-icon>
+    </button>
+  </div>
+
   <br>
 </div>
 
@@ -56,25 +64,48 @@
 <p></p>
 <br>
 
-<p *ngIf="!books"><em>Loading... Please wait while the data is being fetched.</em></p>
 
-<table *ngIf="books">
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Title</th>
-      <th>Publication Date</th>
-      <th>Description</th>
-      <th>Page Count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let book of books">
-      <td>{{ book.id }}</td>
-      <td>{{ book.title }}</td>
-      <td>{{ book.publicationDate }}</td>
-      <td>{{ book.description }}</td>
-      <td>{{ book.pageCount }}</td>
-    </tr>
-  </tbody>
-</table>
+
+<mat-table *ngIf="books" [dataSource]="dataSource">
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+    <mat-cell *matCellDef="let book">{{ book.id }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="title">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
+    <mat-cell *matCellDef="let book">{{ book.title }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="publicationDate">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Publication Date</mat-header-cell>
+    <mat-cell *matCellDef="let book">{{ book.publicationDate }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+    <mat-cell *matCellDef="let book">{{ book.description }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="pageCount">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Page Count</mat-header-cell>
+    <mat-cell *matCellDef="let book">{{ book.pageCount }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+    <mat-cell *matCellDef="let book">
+      <button mat-icon-button (click)="editBook(book)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button (click)="deleteBook(book)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>

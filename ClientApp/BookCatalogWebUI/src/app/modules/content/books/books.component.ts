@@ -1,22 +1,30 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs';
-
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 import { Book } from 'src/app/core/models/book';
 import { FilteringService } from 'src/app/core/services/filtering/filtering.service';
 import { SearchService } from 'src/app/core/services/search/search.service';
 import { SortingService } from 'src/app/core/services/sorting/sorting.service';
+import { BookDialogComponent } from '../book-dialog/book-dialog.component';
+import { BooksService } from 'src/app/core/services/books/books.service';
 
 @Component({
   selector: 'app-books',
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.css']
 })
-export class BooksComponent implements OnInit {
+export class BooksComponent implements AfterViewInit {
 
   public books?: Book[];
+
+  public displayedColumns: string[] = ['id', 'title', 'publicationDate', 'description', 'pageCount', 'actions'];
+  public dataSource = new MatTableDataSource<Book>(this.books);
+  @ViewChild(MatPaginator) _paginator!: MatPaginator;
+
   private searchTerms = new Subject<string>();
   public selectedSortOption: any = 7; // Store the selected sorting (default = NO SORT)
   public selectedDateRange: string = ''; // Store the selected date range
@@ -26,29 +34,45 @@ export class BooksComponent implements OnInit {
 
 
   constructor(
-    private http: HttpClient,
+    private bookService: BooksService,
     private searchService: SearchService,
     private sortingService: SortingService,
-    private filteringService: FilteringService
+    private filteringService: FilteringService,
+    private dialog: MatDialog
   ) {
-    http.get<Book[]>('https://localhost:5001/api/v1/books').subscribe(result => {
-      this.books = result;
-    }, error => console.error(error));
+    this.dataSource = new MatTableDataSource<Book>([]);
+    this.getAllBooks();
   }
+
 
   ngOnInit(): void {
     this.searchTerms.pipe(
       debounceTime(300),
       switchMap((term: string) => {
         if (term.trim() === '') {
-          return this.http.get<Book[]>('https://localhost:5001/api/v1/books');
+          return this.bookService.getAllBooks();
         } else {
           return this.searchService.searchBooks(term);
         }
       })
     ).subscribe((result: Book[]) => {
       this.books = result;
+      this.dataSource.data = result;
     }, error => console.error(error));
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this._paginator;
+  }
+
+  getAllBooks() {
+    this.bookService.getAllBooks().subscribe(
+      (result: Book[]) => {
+        this.books = result;
+        this.dataSource.data = result;
+      },
+      (error) => console.error(error)
+    );
   }
 
   search(event: Event): void {
@@ -75,13 +99,12 @@ export class BooksComponent implements OnInit {
         .subscribe(
           (result: Book[]) => {
             this.books = result;
+            this.dataSource.data = result;
           },
           (error) => console.error(error)
         );
     } else {
-      this.http.get<Book[]>('https://localhost:5001/api/v1/books').subscribe(result => {
-        this.books = result;
-      }, error => console.error(error));
+      this.getAllBooks();
     }
   }
 
@@ -99,9 +122,7 @@ export class BooksComponent implements OnInit {
         this.filterBooksThisYear();
         break;
       default:
-        this.http.get<Book[]>('https://localhost:5001/api/v1/books').subscribe(result => {
-          this.books = result;
-        }, error => console.error(error));
+        this.getAllBooks();
         break;
     }
   }
@@ -110,6 +131,7 @@ export class BooksComponent implements OnInit {
     this.filteringService.filterBooksThisMonth().subscribe(
       (result: Book[]) => {
         this.books = result;
+        this.dataSource.data = result;
       },
       (error) => console.error(error)
     );
@@ -119,6 +141,7 @@ export class BooksComponent implements OnInit {
     this.filteringService.filterBooksThisYear().subscribe(
       (result: Book[]) => {
         this.books = result;
+        this.dataSource.data = result;
       },
       (error) => console.error(error)
     );
@@ -150,11 +173,63 @@ export class BooksComponent implements OnInit {
         .subscribe(
           (result: Book[]) => {
             this.books = result;
+            this.dataSource.data = result;
           },
           (error) => console.error(error)
         );
     }
   }
+
+
+  openBookUpdateDialog(book: Book) {
+    const dialogRef = this.dialog.open(BookDialogComponent, {
+      width: '400px',
+      data: { book: book, isEdit: true }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!(result === undefined)) {
+        console.log('The dialog was closed');
+        this.getAllBooks();
+      }
+    });
+  }
+
+  openBookCreateDialog() {
+    const dialogRef = this.dialog.open(BookDialogComponent, {
+      width: '400px',
+      data: { book: null, isEdit: false }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!(result === undefined)) {
+        console.log('The dialog was closed');
+        this.getAllBooks();
+      }
+    });
+  }
+
+  createBook() {
+    this.openBookCreateDialog();
+  }
+
+  editBook(book: Book) {
+    this.openBookUpdateDialog(book);
+  }
+
+  deleteBook(book: Book) {
+    console.log(book);
+    if (book.id != null) {
+      this.bookService.deleteBook(book.id).subscribe(
+        () => {
+          this.getAllBooks();
+          alert("DELETE STATUS: OK")
+        },
+        (error) => console.error(error)
+      );
+    }
+  }
+
 }
 
 interface RequestParam {
