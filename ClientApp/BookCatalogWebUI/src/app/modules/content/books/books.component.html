@@ -2,24 +2,59 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-
 <input class="search-book" type="text" placeholder="Search.." (input)="search($event)">
-
 <br>
 
-<div class="custom-select">
-  <label>Sort by: </label>
-  <select [(ngModel)]="selectedSortOption" (change)="sort()">
-    <option value="1">Title (asc)</option>
-    <option value="2">Title (desc)</option>
-    <option value="3">Publication Date (asc)</option>
-    <option value="4">Publication Date (desc)</option>
-    <option value="5">Page Count (asc)</option>
-    <option value="6">Page Count (desc)</option>
-    <option value="7">None</option>
-  </select>
+<div>
+  <div class="custom-select">
+    <label>Sort by: </label>
+    <select [(ngModel)]="selectedSortOption" (change)="sort()">
+      <option value="1">Title (asc)</option>
+      <option value="2">Title (desc)</option>
+      <option value="3">Publication Date (asc)</option>
+      <option value="4">Publication Date (desc)</option>
+      <option value="5">Page Count (asc)</option>
+      <option value="6">Page Count (desc)</option>
+      <option value="7">None</option>
+    </select>
+  </div>
+
+  <div class="custom-select">
+    <label>Date Range:</label>
+    <select [(ngModel)]="selectedDateRange" (change)="selectDateRange(selectedDateRange)">
+      <option value="">All</option>
+      <option value="custom">Custom</option>
+      <option value="thisMonth">This Month</option>
+      <option value="thisYear">This Year</option>
+    </select>
+  </div>
+
+  <div class="custom-select" *ngIf="selectedDateRange === 'custom'">
+    <mat-form-field>
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate [(ngModel)]="customStartDate" placeholder="Start date" #dateRangeStart>
+        <input matEndDate [(ngModel)]="customEndDate" placeholder="End date" #dateRangeEnd
+          (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)">
+      </mat-date-range-input>
+      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker>
+        <mat-date-range-picker-actions>
+          <button mat-button matDateRangePickerCancel>Cancel</button>
+          <button mat-raised-button color="primary" matDateRangePickerApply
+            (click)="applyCustomDateFilter()">Apply</button>
+        </mat-date-range-picker-actions>
+      </mat-date-range-picker>
+    </mat-form-field>
+
+  </div>
+  <br>
 </div>
 
+<br>
+<p></p>
+<br>
 
 <p *ngIf="!books"><em>Loading... Please wait while the data is being fetched.</em></p>
 

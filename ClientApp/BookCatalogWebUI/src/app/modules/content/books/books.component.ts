@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs';
 
+
 import { Book } from 'src/app/core/models/book';
+import { FilteringService } from 'src/app/core/services/filtering/filtering.service';
 import { SearchService } from 'src/app/core/services/search/search.service';
 import { SortingService } from 'src/app/core/services/sorting/sorting.service';
 
@@ -16,12 +18,19 @@ export class BooksComponent implements OnInit {
 
   public books?: Book[];
   private searchTerms = new Subject<string>();
-  public selectedSortOption: any = 7; // default - NO SORT
+  public selectedSortOption: any = 7; // Store the selected sorting (default = NO SORT)
+  public selectedDateRange: string = ''; // Store the selected date range
+
+  customStartDate: string = '';
+  customEndDate: string = '';
+
 
   constructor(
     private http: HttpClient,
     private searchService: SearchService,
-    private sortingService: SortingService) {
+    private sortingService: SortingService,
+    private filteringService: FilteringService
+  ) {
     http.get<Book[]>('https://localhost:5001/api/v1/books').subscribe(result => {
       this.books = result;
     }, error => console.error(error));
@@ -73,6 +82,77 @@ export class BooksComponent implements OnInit {
       this.http.get<Book[]>('https://localhost:5001/api/v1/books').subscribe(result => {
         this.books = result;
       }, error => console.error(error));
+    }
+  }
+
+  selectDateRange(range: string): void {
+    this.selectedDateRange = range;
+
+    switch (range) {
+      case 'custom':
+        this.applyCustomDateFilter();
+        break;
+      case 'thisMonth':
+        this.filterBooksThisMonth();
+        break;
+      case 'thisYear':
+        this.filterBooksThisYear();
+        break;
+      default:
+        this.http.get<Book[]>('https://localhost:5001/api/v1/books').subscribe(result => {
+          this.books = result;
+        }, error => console.error(error));
+        break;
+    }
+  }
+
+  private filterBooksThisMonth(): void {
+    this.filteringService.filterBooksThisMonth().subscribe(
+      (result: Book[]) => {
+        this.books = result;
+      },
+      (error) => console.error(error)
+    );
+  }
+
+  private filterBooksThisYear(): void {
+    this.filteringService.filterBooksThisYear().subscribe(
+      (result: Book[]) => {
+        this.books = result;
+      },
+      (error) => console.error(error)
+    );
+  }
+
+
+  dateRangeChange(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {
+
+    const startDateParts = dateRangeStart.value.split('/');
+    const endDateParts = dateRangeEnd.value.split('/');
+
+    if (startDateParts.length === 3 && endDateParts.length === 3) {
+      const formattedStartDate = `${startDateParts[0]}.${startDateParts[1]}.${startDateParts[2]}`;
+      const formattedEndDate = `${endDateParts[0]}.${endDateParts[1]}.${endDateParts[2]}`;
+
+      this.customStartDate = formattedStartDate;
+      this.customEndDate = formattedEndDate;
+
+    } else {
+      console.error('Invalid date format');
+    }
+  }
+
+
+  applyCustomDateFilter(): void {
+    if (this.customStartDate && this.customEndDate) {
+      this.filteringService
+        .filterBooksByDateRange(this.customStartDate, this.customEndDate)
+        .subscribe(
+          (result: Book[]) => {
+            this.books = result;
+          },
+          (error) => console.error(error)
+        );
     }
   }
 }
