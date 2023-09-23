@@ -67,5 +67,17 @@ namespace BookCatalog.DAL.EF.Repositories.BookRepository
 
             return await FilterBooksByCustomDatePublicationAsync(firstDayOfYear, lastDayOfYear);
         }
+
+        public async Task<Dictionary<int, int>> GetBooksCountByPublicationYearAsync()
+        {
+            return await _dbSet
+                .GroupBy(b => b.PublicationDate.Year)
+                .Select(g => new
+                {
+                    Year = g.Key,
+                    Count = g.Count()
+                })
+                .ToDictionaryAsync(item => item.Year, item => item.Count);
+        }
     }
 }

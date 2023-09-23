@@ -41,5 +41,11 @@ namespace BookCatalog.Domain.Repositories.BookRepository
         /// </summary>
         /// <returns>A list of filtered book`s entities.</returns>
         Task<IEnumerable<Book>> FilterBooksByThisYearPublicationAsync();
+
+        /// <summary>
+        /// Gets the count of books by publication year.
+        /// </summary>
+        /// <returns>A dictionary with the publication year as the key and the count of books as the value.</returns>
+        Task<Dictionary<int, int>> GetBooksCountByPublicationYearAsync();
     }
 }
