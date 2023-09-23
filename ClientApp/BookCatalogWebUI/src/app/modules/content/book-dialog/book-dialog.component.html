@@ -2,15 +2,15 @@
 
 <form [formGroup]="bookForm">
   <mat-form-field *ngIf="bookForm.get('id')?.value !== null">
-    <input matInput formControlName="id" placeholder="ID книги" readonly>
+    <input matInput formControlName="id" placeholder="ID book" readonly>
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput formControlName="title" placeholder="Назва книги" required>
+    <input matInput formControlName="title" placeholder="Book title" required>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>Дата публікації</mat-label>
+    <mat-label>Date of publication</mat-label>
     <input matInput [matDatepicker]="picker" formControlName="publicationDate">
     <mat-hint>MM/DD/YYYY</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -18,15 +18,15 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput formControlName="description" placeholder="Опис" required>
+    <input matInput formControlName="description" placeholder="Description" required>
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput formControlName="pageCount" placeholder="Кількість сторінок" required>
+    <input matInput formControlName="pageCount" placeholder="Number of pages" required>
   </mat-form-field>
 
   <div class="buttons">
-    <button mat-button (click)="saveBook()" [disabled]="bookForm.invalid">Зберегти</button>
-    <button mat-button (click)="cancel()">Скасувати</button>
+    <button mat-button (click)="saveBook()" [disabled]="bookForm.invalid">Save</button>
+    <button mat-button (click)="cancel()">Cancel</button>
   </div>
 </form>

@@ -1,10 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 import { Book } from 'src/app/core/models/book';
 import { BookRequest } from 'src/app/core/models/bookRequest';
 import { BooksService } from 'src/app/core/services/books/books.service';
+import { LocalStorageService } from 'src/app/core/services/storage/local-storage.service';
 
 @Component({
   selector: 'app-book-dialog',
@@ -14,14 +16,16 @@ import { BooksService } from 'src/app/core/services/books/books.service';
 export class BookDialogComponent {
   bookForm: FormGroup;
   dialogTitle: string;
+  private localStorageKey = 'bookDialogFormData';
+  private localStorageSubscription: Subscription;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<BookDialogComponent>,
     private bookService: BooksService,
-    @Inject(MAT_DIALOG_DATA) private data: { book: Book, isEdit: boolean }
-  ) {
-    this.dialogTitle = data.isEdit ? 'Редагувати книгу' : 'Додати нову книгу';
+    private localStorageService: LocalStorageService,
+    @Inject(MAT_DIALOG_DATA) private data: { book: Book, isEdit: boolean }) {
+    this.dialogTitle = data.isEdit ? 'Edit book' : 'Add a new';
 
     this.bookForm = this.fb.group({
       id: [data.book ? data.book.id : null],
@@ -30,13 +34,27 @@ export class BookDialogComponent {
       description: [data.book ? data.book.description : '', Validators.required],
       pageCount: [data.book ? data.book.pageCount : '', Validators.required]
     });
+
+    this.localStorageSubscription = this.bookForm.valueChanges.subscribe(formData => {
+      this.localStorageService.saveFormData(this.localStorageKey, formData);
+    });
+  }
+
+  ngOnInit(): void {
+    const formData = this.localStorageService.getFormData(this.localStorageKey);
+    if (formData) {
+      this.bookForm.patchValue(formData);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.localStorageSubscription.unsubscribe();
+    this.localStorageService.clearFormData(this.localStorageKey);
+    this.dialogRef.close();
   }
 
   saveBook() {
     if (this.bookForm.valid) {
-
-      console.log(this.data);
-
       const formData = this.bookForm.value;
 
       const bookRequest: BookRequest = {
@@ -69,6 +87,8 @@ export class BookDialogComponent {
   }
 
   cancel() {
+    this.localStorageSubscription.unsubscribe();
+    this.localStorageService.clearFormData(this.localStorageKey);
     this.dialogRef.close();
   }
 }
