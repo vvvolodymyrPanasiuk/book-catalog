@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -11,29 +11,37 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { BooksComponent } from './books/books.component';
 import { ContentRoutingModule } from './content-routing.module';
+import { BookDialogComponent } from './book-dialog/book-dialog.component';
 
 
 @NgModule({
   declarations: [
-    BooksComponent
+    BooksComponent,
+    BookDialogComponent
   ],
   imports: [
     CommonModule,
     ContentRoutingModule,
     RouterModule,
+    ReactiveFormsModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTableModule,
+    MatPaginatorModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatDividerModule,
     MatIconModule,
-    FormsModule
+    MatDialogModule
   ],
   providers: [],
   exports: [
