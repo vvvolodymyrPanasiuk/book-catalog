@@ -34,3 +34,9 @@
   color: #000;
   cursor: pointer;
 }
+
+.editing-book {
+  background-color: red;
+  color: black;
+  font-weight: bold;
+}

@@ -23,6 +23,7 @@ export class BooksComponent implements AfterViewInit {
 
   public books?: Book[];
   private tempIsUpd?: boolean;
+  public editingBookId?: string | null = null; // Змінна для зберігання ID книги для редагування
 
   public displayedColumns: string[] = ['id', 'title', 'publicationDate', 'description', 'pageCount', 'actions'];
   public dataSource = new MatTableDataSource<Book>(this.books);
@@ -230,6 +231,7 @@ export class BooksComponent implements AfterViewInit {
 
   private openBookUpdateDialog(book: Book) {
     this.tempIsUpd = false;
+    this.editingBookId = book.id; // Зберігання ID редагованої книги
 
     const dialogRef = this.dialog.open(BookDialogComponent, {
       width: '400px',
@@ -237,6 +239,7 @@ export class BooksComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.editingBookId = null;
       if (!(result === undefined)) {
         console.log('The dialog was closed');
         this.getAllBooks();
