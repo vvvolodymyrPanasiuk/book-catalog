@@ -18,6 +18,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { BooksComponent } from './books/books.component';
 import { ContentRoutingModule } from './content-routing.module';
 import { BookDialogComponent } from './book-dialog/book-dialog.component';
+import { LocalStorageService } from 'src/app/core/services/storage/local-storage.service';
 
 
 @NgModule({
@@ -43,7 +44,10 @@ import { BookDialogComponent } from './book-dialog/book-dialog.component';
     MatIconModule,
     MatDialogModule
   ],
-  providers: [],
+  providers:
+    [
+      LocalStorageService
+    ],
   exports: [
     BooksComponent,
     ContentRoutingModule

@@ -6,11 +6,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 
 import { Book } from 'src/app/core/models/book';
+import { SortingRequestParam } from 'src/app/core/models/sortingRequestParam';
 import { FilteringService } from 'src/app/core/services/filtering/filtering.service';
 import { SearchService } from 'src/app/core/services/search/search.service';
 import { SortingService } from 'src/app/core/services/sorting/sorting.service';
 import { BookDialogComponent } from '../book-dialog/book-dialog.component';
 import { BooksService } from 'src/app/core/services/books/books.service';
+import { LocalStorageService } from 'src/app/core/services/storage/local-storage.service';
 
 @Component({
   selector: 'app-books',
@@ -20,6 +22,7 @@ import { BooksService } from 'src/app/core/services/books/books.service';
 export class BooksComponent implements AfterViewInit {
 
   public books?: Book[];
+  private tempIsUpd?: boolean;
 
   public displayedColumns: string[] = ['id', 'title', 'publicationDate', 'description', 'pageCount', 'actions'];
   public dataSource = new MatTableDataSource<Book>(this.books);
@@ -28,9 +31,8 @@ export class BooksComponent implements AfterViewInit {
   private searchTerms = new Subject<string>();
   public selectedSortOption: any = 7; // Store the selected sorting (default = NO SORT)
   public selectedDateRange: string = ''; // Store the selected date range
-
-  customStartDate: string = '';
-  customEndDate: string = '';
+  public customStartDate: string = '';
+  public customEndDate: string = '';
 
 
   constructor(
@@ -38,7 +40,8 @@ export class BooksComponent implements AfterViewInit {
     private searchService: SearchService,
     private sortingService: SortingService,
     private filteringService: FilteringService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private localStorageService: LocalStorageService
   ) {
     this.dataSource = new MatTableDataSource<Book>([]);
     this.getAllBooks();
@@ -46,6 +49,15 @@ export class BooksComponent implements AfterViewInit {
 
 
   ngOnInit(): void {
+    if (localStorage.length > 0) {
+      if (this.tempIsUpd) {
+        const formData = this.localStorageService.getFormData('bookDialogFormData');
+        this.openBookUpdateDialog(formData);
+      } else {
+        this.openBookCreateDialog();
+      }
+    }
+
     this.searchTerms.pipe(
       debounceTime(300),
       switchMap((term: string) => {
@@ -65,23 +77,21 @@ export class BooksComponent implements AfterViewInit {
     this.dataSource.paginator = this._paginator;
   }
 
-  getAllBooks() {
-    this.bookService.getAllBooks().subscribe(
-      (result: Book[]) => {
-        this.books = result;
-        this.dataSource.data = result;
-      },
-      (error) => console.error(error)
-    );
-  }
+
+  //#region search
 
   search(event: Event): void {
     const term = (event.target as HTMLInputElement).value;
     this.searchTerms.next(term);
   }
 
+  //#endregion
+
+
+  //#region sorting
+
   sort(): void {
-    const sortOptions: { [id: number]: RequestParam } = {
+    const sortOptions: { [id: number]: SortingRequestParam } = {
       1: { field: 'title', ascending: true },
       2: { field: 'title', ascending: false },
       3: { field: 'publicationdate', ascending: true },
@@ -107,6 +117,11 @@ export class BooksComponent implements AfterViewInit {
       this.getAllBooks();
     }
   }
+
+  //#endregion
+
+
+  //#region filtering
 
   selectDateRange(range: string): void {
     this.selectedDateRange = range;
@@ -147,7 +162,6 @@ export class BooksComponent implements AfterViewInit {
     );
   }
 
-
   dateRangeChange(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {
 
     const startDateParts = dateRangeStart.value.split('/');
@@ -165,7 +179,6 @@ export class BooksComponent implements AfterViewInit {
     }
   }
 
-
   applyCustomDateFilter(): void {
     if (this.customStartDate && this.customEndDate) {
       this.filteringService
@@ -180,8 +193,44 @@ export class BooksComponent implements AfterViewInit {
     }
   }
 
+  //#endregion
 
-  openBookUpdateDialog(book: Book) {
+
+  //#region CRUD
+
+  getAllBooks() {
+    this.bookService.getAllBooks().subscribe(
+      (result: Book[]) => {
+        this.books = result;
+        this.dataSource.data = result;
+      },
+      (error) => console.error(error)
+    );
+  }
+
+  createBook() {
+    this.openBookCreateDialog();
+  }
+
+  editBook(book: Book) {
+    this.openBookUpdateDialog(book);
+  }
+
+  deleteBook(book: Book) {
+    if (book.id != null) {
+      this.bookService.deleteBook(book.id).subscribe(
+        () => {
+          this.getAllBooks();
+          alert("DELETE STATUS: OK")
+        },
+        (error) => console.error(error)
+      );
+    }
+  }
+
+  private openBookUpdateDialog(book: Book) {
+    this.tempIsUpd = false;
+
     const dialogRef = this.dialog.open(BookDialogComponent, {
       width: '400px',
       data: { book: book, isEdit: true }
@@ -195,7 +244,9 @@ export class BooksComponent implements AfterViewInit {
     });
   }
 
-  openBookCreateDialog() {
+  private openBookCreateDialog() {
+    this.tempIsUpd = false;
+
     const dialogRef = this.dialog.open(BookDialogComponent, {
       width: '400px',
       data: { book: null, isEdit: false }
@@ -209,30 +260,6 @@ export class BooksComponent implements AfterViewInit {
     });
   }
 
-  createBook() {
-    this.openBookCreateDialog();
-  }
+  //#endregion
 
-  editBook(book: Book) {
-    this.openBookUpdateDialog(book);
-  }
-
-  deleteBook(book: Book) {
-    console.log(book);
-    if (book.id != null) {
-      this.bookService.deleteBook(book.id).subscribe(
-        () => {
-          this.getAllBooks();
-          alert("DELETE STATUS: OK")
-        },
-        (error) => console.error(error)
-      );
-    }
-  }
-
-}
-
-interface RequestParam {
-  field: string;
-  ascending: boolean;
 }
