@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgChartsModule } from 'ng2-charts';
 
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -19,12 +20,14 @@ import { BooksComponent } from './books/books.component';
 import { ContentRoutingModule } from './content-routing.module';
 import { BookDialogComponent } from './book-dialog/book-dialog.component';
 import { LocalStorageService } from 'src/app/core/services/storage/local-storage.service';
+import { BookChartComponent } from './book-chart/book-chart.component';
 
 
 @NgModule({
   declarations: [
     BooksComponent,
-    BookDialogComponent
+    BookDialogComponent,
+    BookChartComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +45,8 @@ import { LocalStorageService } from 'src/app/core/services/storage/local-storage
     MatButtonToggleModule,
     MatDividerModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    NgChartsModule
   ],
   providers:
     [
