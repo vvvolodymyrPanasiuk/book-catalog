@@ -1,8 +1,10 @@
-<header>
-  <a class="logo" [routerLink]="['/home']">IT INNOVATIONS</a>
-  <div class="header-right">
-    <a [routerLink]="['/home']">Home</a>
-    <a [routerLink]="['/books']">Books</a>
-    <a [routerLink]="['/books/chart']">Charts</a>
-  </div>
+<header class="header-container">
+  <mat-toolbar color="primary">
+    <a class="logo" [routerLink]="['/home']">IT INNOVATIONS</a>
+    <div class="header-right">
+      <a [routerLink]="['/home']">Home</a>
+      <a [routerLink]="['/books']">Books</a>
+      <a [routerLink]="['/books/chart']">Charts</a>
+    </div>
+  </mat-toolbar>
 </header>
