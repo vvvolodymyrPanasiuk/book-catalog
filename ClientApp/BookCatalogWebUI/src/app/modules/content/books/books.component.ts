@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { Sort } from '@angular/material/sort';
 
 import { Book } from 'src/app/core/models/book';
 import { SortingRequestParam } from 'src/app/core/models/sortingRequestParam';
@@ -29,6 +30,7 @@ export class BooksComponent implements AfterViewInit {
 
   public displayedColumns: string[] = ['id', 'title', 'publicationDate', 'description', 'pageCount', 'actions'];
   public dataSource = new MatTableDataSource<Book>(this.books);
+  sortedData?: Book[]; //for sorting local data
   @ViewChild(MatPaginator) _paginator!: MatPaginator;
 
   private searchTerms = new Subject<string>();
@@ -118,6 +120,36 @@ export class BooksComponent implements AfterViewInit {
         );
     } else {
       this.getAllBooks();
+    }
+  }
+
+  sortLocalData(sort: Sort) {
+    const data = this.books?.slice();
+    if (!sort.active || sort.direction === '') {
+      this.sortedData = data;
+      return;
+    }
+
+    this.sortedData = data?.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'id':
+          return compare(a.id, b.id, isAsc);
+        case 'title':
+          return compare(a.title, b.title, isAsc);
+        case 'publicationDate':
+          return compare(a.publicationDate, b.publicationDate, isAsc);
+        case 'description':
+          return compare(a.description, b.description, isAsc);
+        case 'pageCount':
+          return compare(a.pageCount, b.pageCount, isAsc);
+        default:
+          return 0;
+      }
+    });
+
+    if (this.sortedData !== undefined) {
+      this.dataSource.data = this.sortedData;
     }
   }
 
@@ -280,4 +312,12 @@ export class BooksComponent implements AfterViewInit {
 
   //#endregion
 
+}
+
+
+function compare(a?: number | string, b?: number | string, isAsc?: boolean) {
+  if (a && b) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+  else { return 0 }
 }

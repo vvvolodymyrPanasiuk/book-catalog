@@ -18,6 +18,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
+import { MatSortModule } from '@angular/material/sort';
 
 import { BooksComponent } from './books/books.component';
 import { ContentRoutingModule } from './content-routing.module';
@@ -45,6 +46,7 @@ import { BookExportBottomSheetComponent } from './book-export-bottom-sheet/book-
     MatTableModule,
     MatPaginatorModule,
     MatDatepickerModule,
+    MatSortModule,
     MatNativeDateModule,
     MatButtonModule,
     MatButtonToggleModule,

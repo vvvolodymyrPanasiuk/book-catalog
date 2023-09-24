@@ -65,29 +65,29 @@
 
 
 <div>
-  <mat-table *ngIf="books" [dataSource]="dataSource">
+  <mat-table *ngIf="books" matSort [dataSource]="dataSource" (matSortChange)="sortLocalData($event)">
     <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="id">Id</mat-header-cell>
       <mat-cell *matCellDef="let book">{{ book.id }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="title">Title</mat-header-cell>
       <mat-cell *matCellDef="let book">{{ book.title }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="publicationDate">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Publication Date</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="title">Publication Date</mat-header-cell>
       <mat-cell *matCellDef="let book">{{ book.publicationDate }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="description">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="description">Description</mat-header-cell>
       <mat-cell *matCellDef="let book">{{ book.description }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="pageCount">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Page Count</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="pageCount">Page Count</mat-header-cell>
       <mat-cell *matCellDef="let book">{{ book.pageCount }}</mat-cell>
     </ng-container>
 
