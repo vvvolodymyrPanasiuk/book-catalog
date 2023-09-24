@@ -39,7 +39,7 @@ Follow these steps to download, install, and run the project:
 1. Navigate to the project directory:
 
    ```bash
-   cd "your directory to project"
+   cd "your directory to project"/BookCatalog
    
 2. Start bash script for running web API server:
 
