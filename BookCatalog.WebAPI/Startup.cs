@@ -20,6 +20,10 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using BookCatalog.WebAPI.Middleware;
+using BookCatalog.Service.Export;
+using BookCatalog.Service.Export.Implementations.ExcelExportImplementation;
+using BookCatalog.Service.Export.Implementations.PdfExportImplementation;
+using BookCatalog.Service.Export.Implementations.StrategyFactory;
 
 namespace BookCatalog.WebAPI
 {
@@ -80,6 +84,10 @@ namespace BookCatalog.WebAPI
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IBookRepository, BookRepository>();
+
+            services.AddScoped<IExportStrategy, ExcelExportStrategy>();
+            services.AddScoped<IExportStrategy, PdfExportStrategy>();
+            services.AddScoped<IExportStrategyFactory, ExportStrategyFactory>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)

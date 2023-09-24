@@ -1,0 +1,10 @@
+<div style="display: block" class="chart">
+  <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+    [legend]="barChartLegend">
+  </canvas>
+</div>
+
+<button mat-fab color="accent" extended (click)="refreshData()">
+  <mat-icon>refresh</mat-icon>
+  Refresh chart
+</button>

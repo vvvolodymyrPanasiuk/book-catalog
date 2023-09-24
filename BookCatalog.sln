@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientApp", "ClientApp", "{
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "BookCatalogWebUI", "ClientApp\BookCatalogWebUI\BookCatalogWebUI.esproj", "{06D3D5A8-C595-41E8-A1FB-32863988B6D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookCatalog.Service.Export", "BookCatalog.Service.Export\BookCatalog.Service.Export.csproj", "{B66ABF03-9768-4015-9AEB-F3A0509CAE4F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{06D3D5A8-C595-41E8-A1FB-32863988B6D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06D3D5A8-C595-41E8-A1FB-32863988B6D7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{06D3D5A8-C595-41E8-A1FB-32863988B6D7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{B66ABF03-9768-4015-9AEB-F3A0509CAE4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B66ABF03-9768-4015-9AEB-F3A0509CAE4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B66ABF03-9768-4015-9AEB-F3A0509CAE4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B66ABF03-9768-4015-9AEB-F3A0509CAE4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
