@@ -11,3 +11,34 @@ h1 {
   color: black;
   font-weight: bold;
 }
+
+.func-books {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+mat-form-field:nth-child(1) {
+  flex-basis: 20%;
+  margin-right: 25px;
+}
+
+mat-form-field:nth-child(2) {
+  flex-basis: 20%;
+  margin-right: 25px;
+}
+
+div.mat-form-field:nth-child(3) {
+  flex-basis: 20%;
+  margin-right: 25px;
+}
+
+button:nth-child(4) {
+  flex-basis: 15%;
+}
+
+button:nth-child(5) {
+  flex-basis: 15%;
+}

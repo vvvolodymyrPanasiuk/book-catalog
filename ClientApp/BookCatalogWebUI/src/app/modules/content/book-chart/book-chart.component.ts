@@ -16,7 +16,12 @@ export class BookChartComponent implements OnInit {
   public barChartType = 'bar';
   public barChartLegend = true;
 
-  public barChartData: any[] = [{ data: [], label: 'Count of books per year' }];
+  public barChartData: any[] = [
+    {
+      data: [],
+      label: 'Count of books per year',
+      backgroundColor: 'rgb(64, 38, 233)'
+    }];
 
   constructor(private bookChartService: BookChartService) { }
 
