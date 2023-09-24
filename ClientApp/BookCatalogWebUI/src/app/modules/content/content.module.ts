@@ -16,19 +16,23 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatListModule } from '@angular/material/list';
 
 import { BooksComponent } from './books/books.component';
 import { ContentRoutingModule } from './content-routing.module';
 import { BookDialogComponent } from './book-dialog/book-dialog.component';
 import { LocalStorageService } from 'src/app/core/services/storage/local-storage.service';
 import { BookChartComponent } from './book-chart/book-chart.component';
+import { BookExportBottomSheetComponent } from './book-export-bottom-sheet/book-export-bottom-sheet.component';
 
 
 @NgModule({
   declarations: [
     BooksComponent,
     BookDialogComponent,
-    BookChartComponent
+    BookChartComponent,
+    BookExportBottomSheetComponent
   ],
   imports: [
     CommonModule,
@@ -44,6 +48,8 @@ import { BookChartComponent } from './book-chart/book-chart.component';
     MatNativeDateModule,
     MatButtonModule,
     MatButtonToggleModule,
+    MatListModule,
+    MatBottomSheetModule,
     MatDividerModule,
     MatIconModule,
     MatSelectModule,

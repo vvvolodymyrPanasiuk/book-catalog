@@ -4,6 +4,7 @@ import { debounceTime, switchMap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import { Book } from 'src/app/core/models/book';
 import { SortingRequestParam } from 'src/app/core/models/sortingRequestParam';
@@ -13,6 +14,7 @@ import { SortingService } from 'src/app/core/services/sorting/sorting.service';
 import { BookDialogComponent } from '../book-dialog/book-dialog.component';
 import { BooksService } from 'src/app/core/services/books/books.service';
 import { LocalStorageService } from 'src/app/core/services/storage/local-storage.service';
+import { BookExportBottomSheetComponent } from '../book-export-bottom-sheet/book-export-bottom-sheet.component';
 
 @Component({
   selector: 'app-books',
@@ -23,7 +25,7 @@ export class BooksComponent implements AfterViewInit {
 
   public books?: Book[];
   private tempIsUpd?: boolean;
-  public editingBookId?: string | null = null; // Змінна для зберігання ID книги для редагування
+  public editingBookId?: string | null = null;
 
   public displayedColumns: string[] = ['id', 'title', 'publicationDate', 'description', 'pageCount', 'actions'];
   public dataSource = new MatTableDataSource<Book>(this.books);
@@ -35,21 +37,21 @@ export class BooksComponent implements AfterViewInit {
   public customStartDate: string = '';
   public customEndDate: string = '';
 
-
   constructor(
     private bookService: BooksService,
     private searchService: SearchService,
     private sortingService: SortingService,
     private filteringService: FilteringService,
     private dialog: MatDialog,
-    private localStorageService: LocalStorageService
-  ) {
-    this.dataSource = new MatTableDataSource<Book>([]);
-    this.getAllBooks();
-  }
+    private localStorageService: LocalStorageService,
+    private bottomSheet: MatBottomSheet
+  ) { }
 
 
   ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<Book>([]);
+    this.getAllBooks();
+
     if (localStorage.length > 0) {
       if (this.tempIsUpd) {
         const formData = this.localStorageService.getFormData('bookDialogFormData');
@@ -266,8 +268,16 @@ export class BooksComponent implements AfterViewInit {
   //#endregion
 
 
+  //#region Import
 
   openBottomSheet(): void {
-
+    if (this.books) {
+      const bottomSheetRef = this.bottomSheet.open(BookExportBottomSheetComponent, {
+        data: { books: this.books },
+      });
+    }
   }
+
+  //#endregion
+
 }
