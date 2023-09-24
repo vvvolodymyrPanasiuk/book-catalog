@@ -6,6 +6,7 @@ import { NgChartsModule } from 'ng2-charts';
 
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -45,6 +46,7 @@ import { BookExportBottomSheetComponent } from './book-export-bottom-sheet/book-
     MatInputModule,
     MatTableModule,
     MatPaginatorModule,
+    MatSnackBarModule,
     MatDatepickerModule,
     MatSortModule,
     MatNativeDateModule,

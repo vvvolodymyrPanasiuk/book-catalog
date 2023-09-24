@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Sort } from '@angular/material/sort';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Book } from 'src/app/core/models/book';
 import { SortingRequestParam } from 'src/app/core/models/sortingRequestParam';
@@ -46,7 +47,8 @@ export class BooksComponent implements AfterViewInit {
     private filteringService: FilteringService,
     private dialog: MatDialog,
     private localStorageService: LocalStorageService,
-    private bottomSheet: MatBottomSheet
+    private bottomSheet: MatBottomSheet,
+    private snackBar: MatSnackBar
   ) { }
 
 
@@ -256,7 +258,7 @@ export class BooksComponent implements AfterViewInit {
       this.bookService.deleteBook(book.id).subscribe(
         () => {
           this.getAllBooks();
-          alert("DELETE STATUS: OK")
+          this.snackBar.open(`${book.title} was deleted`, "OK");
         },
         (error) => console.error(error)
       );
