@@ -18,7 +18,7 @@ Follow these steps to download, install, and run the project:
 1. Clone the repository:
 
    ```bash
-   [git clone https://github.com/yourusername/book-catalog.git](https://github.com/vvvolodymyrPanasiuk/BookCatalog.git)
+   https://github.com/vvvolodymyrPanasiuk/BookCatalog.git
 
 ## Starting the server part
 
