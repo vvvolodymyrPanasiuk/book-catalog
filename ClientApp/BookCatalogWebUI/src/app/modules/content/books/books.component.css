@@ -1,38 +1,9 @@
 .search-book {
-  color: #333;
-  font-size: 1rem;
-  margin: 0 auto;
-  padding: 1rem 2rem;
-  border-radius: 0.2rem;
-  background-color: rgb(247, 241, 235);
-  border: none;
-  width: 90%;
-  display: block;
-  border-bottom: 0.3rem solid transparent;
-  transition: all 0.3s;
+  width: 100%;
 }
 
-.custom-select {
-  float: left;
-  min-width: 50px;
-  position: relative;
-}
-
-.custom-select label {
-  font-size: 1rem;
-  color: #000;
+h1 {
   font-weight: bold;
-}
-
-.custom-select select {
-  width: 50%;
-  font-size: 1rem;
-  padding: 0.675em 6em 0.675em 1em;
-  background-color: #fff;
-  border: 1px solid #caced1;
-  border-radius: 0.25rem;
-  color: #000;
-  cursor: pointer;
 }
 
 .editing-book {

@@ -6,6 +6,7 @@
   </mat-form-field>
 
   <mat-form-field>
+    <mat-label>Book title</mat-label>
     <input matInput formControlName="title" placeholder="Book title" required>
   </mat-form-field>
 
@@ -18,15 +19,17 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput formControlName="description" placeholder="Description" required>
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description" placeholder="Description"></textarea>
   </mat-form-field>
 
   <mat-form-field>
+    <mat-label>Number of pages</mat-label>
     <input matInput formControlName="pageCount" placeholder="Number of pages" required>
   </mat-form-field>
 
   <div class="buttons">
-    <button mat-button (click)="saveBook()" [disabled]="bookForm.invalid">Save</button>
-    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="saveBook()" [disabled]="bookForm.invalid">Save</button>
+    <button mat-raised-button color="primary" (click)="cancel()">Cancel</button>
   </div>
 </form>

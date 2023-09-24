@@ -1,35 +1,37 @@
 <h1 id="tableLabel">Book Catalog</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
-
-<input class="search-book" type="text" placeholder="Search.." (input)="search($event)">
-<br>
+<div>
+  <mat-form-field class="search-book">
+    <mat-label>Search..</mat-label>
+    <input matInput placeholder="Search.." (input)="search($event)">
+  </mat-form-field>
+</div>
 
 <div>
-  <div class="custom-select">
-    <label>Sort by: </label>
-    <select [(ngModel)]="selectedSortOption" (change)="sort()">
-      <option value="1">Title (asc)</option>
-      <option value="2">Title (desc)</option>
-      <option value="3">Publication Date (asc)</option>
-      <option value="4">Publication Date (desc)</option>
-      <option value="5">Page Count (asc)</option>
-      <option value="6">Page Count (desc)</option>
-      <option value="7">None</option>
-    </select>
-  </div>
+  <mat-form-field>
+    <mat-label>Select an sorting</mat-label>
+    <mat-select [(ngModel)]="selectedSortOption" (selectionChange)="sort()">
+      <mat-option value="7">None</mat-option>
+      <mat-option value="1">Title (asc)</mat-option>
+      <mat-option value="2">Title (desc)</mat-option>
+      <mat-option value="3">Publication Date (asc)</mat-option>
+      <mat-option value="4">Publication Date (desc)</mat-option>
+      <mat-option value="5">Page Count (asc)</mat-option>
+      <mat-option value="6">Page Count (desc)</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-  <div class="custom-select">
-    <label>Date Range:</label>
-    <select [(ngModel)]="selectedDateRange" (change)="selectDateRange(selectedDateRange)">
-      <option value="">All</option>
-      <option value="custom">Custom</option>
-      <option value="thisMonth">This Month</option>
-      <option value="thisYear">This Year</option>
-    </select>
-  </div>
+  <mat-form-field>
+    <mat-label>Select an date range filtering</mat-label>
+    <mat-select [(ngModel)]="selectedDateRange" (selectionChange)="selectDateRange(selectedDateRange)">
+      <mat-option value="">None</mat-option>
+      <mat-option value="custom">Custom data</mat-option>
+      <mat-option value="thisMonth">This Month</mat-option>
+      <mat-option value="thisYear">This Year</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-  <div class="custom-select" *ngIf="selectedDateRange === 'custom'">
+  <div *ngIf="selectedDateRange === 'custom'">
     <mat-form-field>
       <mat-label>Enter a date range</mat-label>
       <mat-date-range-input [rangePicker]="picker">
@@ -47,66 +49,64 @@
         </mat-date-range-picker-actions>
       </mat-date-range-picker>
     </mat-form-field>
-
   </div>
 
-  <div class="custom-select">
-    <label>Add new book:</label>
-    <button mat-icon-button (click)="createBook()">
-      <mat-icon>add_box</mat-icon>
-    </button>
-  </div>
+  <button mat-fab color="primary" extended (click)="createBook()">
+    <mat-icon>add_box</mat-icon>
+    Add new book
+  </button>
 
-  <br>
+  <button mat-fab color="primary" extended (click)="openBottomSheet()">
+    <mat-icon>archive</mat-icon>
+    Import books
+  </button>
+
 </div>
 
-<br>
-<p></p>
-<br>
 
+<div>
+  <mat-table *ngIf="books" [dataSource]="dataSource">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let book">{{ book.id }}</mat-cell>
+    </ng-container>
 
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
+      <mat-cell *matCellDef="let book">{{ book.title }}</mat-cell>
+    </ng-container>
 
-<mat-table *ngIf="books" [dataSource]="dataSource">
-  <ng-container matColumnDef="id">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-    <mat-cell *matCellDef="let book">{{ book.id }}</mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="publicationDate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Publication Date</mat-header-cell>
+      <mat-cell *matCellDef="let book">{{ book.publicationDate }}</mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="title">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
-    <mat-cell *matCellDef="let book">{{ book.title }}</mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+      <mat-cell *matCellDef="let book">{{ book.description }}</mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="publicationDate">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Publication Date</mat-header-cell>
-    <mat-cell *matCellDef="let book">{{ book.publicationDate }}</mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="pageCount">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Page Count</mat-header-cell>
+      <mat-cell *matCellDef="let book">{{ book.pageCount }}</mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="description">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
-    <mat-cell *matCellDef="let book">{{ book.description }}</mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell *matCellDef="let book">
+        <button mat-icon-button (click)="editBook(book)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteBook(book)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="pageCount">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Page Count</mat-header-cell>
-    <mat-cell *matCellDef="let book">{{ book.pageCount }}</mat-cell>
-  </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"
+      [ngClass]="{'editing-book': row.id === editingBookId}"></mat-row>
+  </mat-table>
 
-  <ng-container matColumnDef="actions">
-    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
-    <mat-cell *matCellDef="let book">
-      <button mat-icon-button (click)="editBook(book)">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button mat-icon-button (click)="deleteBook(book)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </mat-cell>
-  </ng-container>
-
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"
-    [ngClass]="{'editing-book': row.id === editingBookId}"></mat-row>
-</mat-table>
-
-<mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+</div>

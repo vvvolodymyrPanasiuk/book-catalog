@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 
 import { BooksComponent } from './books/books.component';
 import { ContentRoutingModule } from './content-routing.module';
@@ -45,6 +46,7 @@ import { BookChartComponent } from './book-chart/book-chart.component';
     MatButtonToggleModule,
     MatDividerModule,
     MatIconModule,
+    MatSelectModule,
     MatDialogModule,
     NgChartsModule
   ],

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BookCatalog.DAL.EF\BookCatalog.DAL.EF.csproj" />
+    <ProjectReference Include="..\BookCatalog.Service.Export\BookCatalog.Service.Export.csproj" />
   </ItemGroup>
 
 

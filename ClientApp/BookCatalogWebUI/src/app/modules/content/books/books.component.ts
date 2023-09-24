@@ -265,4 +265,9 @@ export class BooksComponent implements AfterViewInit {
 
   //#endregion
 
+
+
+  openBottomSheet(): void {
+
+  }
 }
